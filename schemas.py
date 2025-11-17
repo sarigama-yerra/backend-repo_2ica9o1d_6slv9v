@@ -11,7 +11,7 @@ Model name is converted to lowercase for the collection name:
 - BlogPost -> "blogs" collection
 """
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, HttpUrl
 from typing import Optional
 
 # Example schemas (replace with your own):
@@ -38,11 +38,15 @@ class Product(BaseModel):
     category: str = Field(..., description="Product category")
     in_stock: bool = Field(True, description="Whether product is in stock")
 
-# Add your own schemas here:
-# --------------------------------------------------
+# AI Video generation app schemas
 
-# Note: The Flames database viewer will automatically:
-# 1. Read these schemas from GET /schema endpoint
-# 2. Use them for document validation when creating/editing
-# 3. Handle all database operations (CRUD) directly
-# 4. You don't need to create any database endpoints!
+class Video(BaseModel):
+    """
+    Videos generated from AI prompts
+    Collection name: "video"
+    """
+    prompt: str = Field(..., description="User provided text prompt for the video")
+    preview_image_url: Optional[str] = Field(None, description="URL of generated preview image")
+    status: str = Field("preview", description="Current status: preview | processing | ready | failed")
+    video_url: Optional[str] = Field(None, description="URL of the generated video when ready")
+    user_id: Optional[str] = Field(None, description="Associated user identifier if available")
